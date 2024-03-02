@@ -6,17 +6,6 @@
     <title>Book</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* Custom styles */
-        .card {
-            margin-bottom: 20px;
-        }
-        .navbar-brand {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -27,7 +16,7 @@
                     <a class="nav-link" href="weather.html">Weather</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="admin.html">Admin</a>
+                    <a class="nav-link" href="#" onclick="showAdminPrompt()">Admin</a>
                 </li>
             </ul>
         </div>
@@ -61,6 +50,14 @@
 
     <!-- Custom JavaScript -->
     <script>
+        function showAdminPrompt() {
+            const password = prompt('Enter the password (admin):');
+            if (password === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                alert('Incorrect password. Access denied.');
+            }
+        }
         document.addEventListener("DOMContentLoaded", function() {
             // Handle form submission for booking
             document.getElementById("bookForm").addEventListener("submit", function(event) {
