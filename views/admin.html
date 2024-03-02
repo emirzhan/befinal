@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        .card {
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">Travel Agency</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="weather.html">Weather</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="admin.html">Admin</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Welcome to our Travel Agency!</h1>
+
+        <!-- Form to Create a New Agency -->
+        <form id="createAgencyForm" class="mt-4">
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Name" id="createName" name="createName" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Location" id="createLocation" name="createLocation" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Contact" id="createContact" name="createContact" required>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Create Agency</button>
+                </div>
+            </div>
+        </form>
+
+        <div id="agencyList" class="mt-4">
+            <!-- Agency list will be displayed here -->
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-dark text-white text-center">
+        <div class="container">
+            Smagulov Emirzhan SE-2208
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Load agencies when the page loads
+            loadAgencies();
+
+            // Handle form submission for creating a new agency
+            document.getElementById("createAgencyForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                var name = document.getElementById("createName").value;
+                var location = document.getElementById("createLocation").value;
+                var contact = document.getElementById("createContact").value;
+                createAgency(name, location, contact);
+            });
+
+            // Function to load agencies from server
+            function loadAgencies() {
+                fetch('/travelagency')
+                .then(response => response.json())
+                .then(data => displayAgencies(data));
+            }
+
+            // Function to display agencies in the list
+            function displayAgencies(agencies) {
+                var agencyList = document.getElementById("agencyList");
+                agencyList.innerHTML = "";
+                if (agencies.length === 0) {
+                    agencyList.innerHTML = "<p>No agencies found.</p>";
+                } else {
+                    agencies.forEach(function(agency) {
+                        var card = document.createElement("div");
+                        card.className = "card";
+                        card.setAttribute("data-id", agency._id); // Add data-id attribute
+                        var cardBody = document.createElement("div");
+                        cardBody.className = "card-body";
+                        var title = document.createElement("h5");
+                        title.className = "card-title";
+                        title.textContent = agency.name;
+                        var location = document.createElement("p");
+                        location.className = "card-text";
+                        location.textContent = "Location: " + agency.location;
+                        var contact = document.createElement("p");
+                        contact.className = "card-text";
+                        contact.textContent = "Contact: " + agency.contact;
+                        var deleteButton = document.createElement("button");
+                        deleteButton.className = "btn btn-danger";
+                        deleteButton.textContent = "Delete Agency";
+                        deleteButton.addEventListener("click", function() {
+                            deleteAgency(agency._id);
+                        });
+                        var updateButton = document.createElement("button");
+                        updateButton.className = "btn btn-primary";
+                        updateButton.textContent = "Update Agency";
+                        updateButton.addEventListener("click", function() {
+                            var newName = prompt('Enter new name for the agency:', agency.name);
+                            var newLocation = prompt('Enter new location for the agency:', agency.location);
+                            var newContact = prompt('Enter new contact for the agency:', agency.contact);
+                            updateAgency(agency._id, newName, newLocation, newContact);
+                        });
+
+                        cardBody.appendChild(title);
+                        cardBody.appendChild(location);
+                        cardBody.appendChild(contact);
+                        cardBody.appendChild(deleteButton);
+                        cardBody.appendChild(updateButton);
+                        card.appendChild(cardBody);
+                        agencyList.appendChild(card);
+                    });
+                }
+            }
+
+
+            // Function to create a new agency
+            function createAgency(name, location, contact) {
+                fetch('/travelagency', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: name, location: location, contact: contact })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    loadAgencies();
+                    document.getElementById("createName").value = "";
+                    document.getElementById("createLocation").value = "";
+                    document.getElementById("createContact").value = "";
+                });
+            }
+
+            // Function to delete an agency
+            function deleteAgency(id) {
+                fetch('/travelagency/' + id, {
+                    method: 'DELETE'
+                })
+                .then(() => {
+                    var agencyElement = document.querySelector('[data-id="' + id + '"]');
+                    if (agencyElement) {
+                        agencyElement.parentNode.removeChild(agencyElement);
+                    }
+                });
+            }
+
+            // Function to update an agency
+            function updateAgency(id, name, location, contact) {
+                fetch('/travelagency/' + id, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: name, location: location, contact: contact })
+                })
+                .then(response => response.json())
+                .then(data => loadAgencies());
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        .card {
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">Travel Agency</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="weather.html">Weather</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="admin.html">Admin</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>Book Now</h1>
+        <form id="bookForm" class="mt-4">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" required>
+            </div>
+            <div class="form-group">
+                <label for="numberOfPeople">Number of People:</label>
+                <input type="number" class="form-control" id="numberOfPeople" name="numberOfPeople" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Book Now</button>
+        </form>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Handle form submission for booking
+            document.getElementById("bookForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                var startDate = document.getElementById("startDate").value;
+                var endDate = document.getElementById("endDate").value;
+                var numberOfPeople = document.getElementById("numberOfPeople").value;
+                bookTrip(email, password, startDate, endDate, numberOfPeople);
+            });
+
+            // Function to book a trip
+            function bookTrip(email, password, startDate, endDate, numberOfPeople) {
+                // Here, you should send a POST request to your server with the provided information
+                // For simplicity, I'll simulate a successful booking and then redirect to index.html
+                // You'll need to replace this with actual AJAX code to communicate with your server
+
+                // Simulating a successful booking
+                alert("Trip booked successfully!");
+                window.location.href = "index.html"; // Redirecting to index.html
+            }
+        });
+    </script>
+</body>
+</html>

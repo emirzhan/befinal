@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Agency</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        .card {
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">Travel Agency</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="weather.html">Weather</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="admin.html">Admin</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Welcome to our Travel Agency!</h1>
+
+        <div id="agencyList" class="mt-4">
+            <!-- Agency list will be displayed here -->
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-dark text-white text-center">
+        <div class="container">
+            Smagulov Emirzhan SE-2208
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Load agencies when the page loads
+            loadAgencies();
+
+            // Function to load agencies from server
+            function loadAgencies() {
+                fetch('/travelagency')
+                .then(response => response.json())
+                .then(data => displayAgencies(data));
+            }
+
+            // Function to display agencies in the list
+            function displayAgencies(agencies) {
+                var agencyList = document.getElementById("agencyList");
+                agencyList.innerHTML = "";
+                if (agencies.length === 0) {
+                    agencyList.innerHTML = "<p>No agencies found.</p>";
+                } else {
+                    agencies.forEach(function(agency) {
+                        var card = document.createElement("div");
+                        card.className = "card";
+                        var cardBody = document.createElement("div");
+                        cardBody.className = "card-body";
+                        var title = document.createElement("h5");
+                        title.className = "card-title";
+                        title.textContent = agency.name;
+                        var location = document.createElement("p");
+                        location.className = "card-text";
+                        location.textContent = "Location: " + agency.location;
+                        var contact = document.createElement("p");
+                        contact.className = "card-text";
+                        contact.textContent = "Contact: " + agency.contact;
+                        var bookButton = document.createElement("a");
+                        bookButton.className = "btn btn-primary";
+                        bookButton.textContent = "Book";
+                        bookButton.href = "book.html?id=" + agency._id;
+
+                        cardBody.appendChild(title);
+                        cardBody.appendChild(location);
+                        cardBody.appendChild(contact);
+                        cardBody.appendChild(bookButton);
+                        card.appendChild(cardBody);
+                        agencyList.appendChild(card);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">User Management</a>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>User Management</h1>
+
+        <div id="userList" class="mt-4">
+            <!-- User list will be displayed here -->
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-dark text-white text-center">
+        <div class="container">
+            Smagulov Emirzhan SE-2208
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Load users when the page loads
+            loadUsers();
+
+            // Function to load users from server
+            function loadUsers() {
+                fetch('/users')
+                .then(response => response.json())
+                .then(data => displayUsers(data));
+            }
+
+            // Function to display users in the list
+            function displayUsers(users) {
+                var userList = document.getElementById("userList");
+                userList.innerHTML = "";
+                if (users.length === 0) {
+                    userList.innerHTML = "<p>No users found.</p>";
+                } else {
+                    users.forEach(function(user) {
+                        var card = document.createElement("div");
+                        card.className = "card";
+                        var cardBody = document.createElement("div");
+                        cardBody.className = "card-body";
+                        var name = document.createElement("h5");
+                        name.className = "card-title";
+                        name.textContent = "Name: " + user.name;
+                        var email = document.createElement("p");
+                        email.className = "card-text";
+                        email.textContent = "Email: " + user.email;
+                        var password = document.createElement("p");
+                        password.className = "card-text";
+                        password.textContent = "Password: " + user.password;
+                        var dateOfBirth = document.createElement("p");
+                        dateOfBirth.className = "card-text";
+                        dateOfBirth.textContent = "Date of Birth: " + user.dateOfBirth;
+
+                        cardBody.appendChild(name);
+                        cardBody.appendChild(email);
+                        cardBody.appendChild(password);
+                        cardBody.appendChild(dateOfBirth);
+                        card.appendChild(cardBody);
+                        userList.appendChild(card);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
